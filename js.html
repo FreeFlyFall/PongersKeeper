@@ -1,0 +1,78 @@
+<script>
+
+    var target = 0; // add onchange listener
+    var isP1 = true;
+    var isP2 = false;
+    
+    var player1 = {
+      score: 0,
+      active: 0
+    }
+    var player2 = {
+      score: 0,
+      active: 0
+    }
+    
+    var dbstat = {
+      p1IsActive: 0,
+      p2IsActive: 0
+    }
+    
+    //window.addEventListener('load', (event) => {
+    //  console.log('page is fully loaded');
+    //});
+    
+    
+    google.script.run.withSuccessHandler(setupHandler).initialSetup(dbstat);
+    function setupHandler(rdbstat){
+        console.log('Initialize me, big boii.');
+        if (rdbstat.p2IsActive == 1) {
+          console.log('p2IsActiev returned 1');
+          isP2 = true;
+          isP1 = false;
+        } else {
+        }
+        console.log('Initialization complete.');
+        console.log(rdbstat.p2IsActive);
+        console.log("P1?: " + isP1 + ", " "P2?:" + isP2);
+      }
+    
+    
+    
+    //// Button listener
+    document.getElementById("submit").addEventListener("click",function(){
+      // Read db for p#active values in gs and return result for eval
+      if (isP1 == true) {
+        updateScore1();
+      } else if (isP2 == true) {
+        updateScore2();
+      } else {
+        console.log("error")
+      }
+    });
+    
+    /// Update score in db and js for player 1
+    function updateScore1(player1){
+      google.script.run 
+            .withSuccessHandler(function(rPlayer1){
+                player1.score = rPlayer1.score;
+                console.log('Score1 updated to: ' + player1.score);
+                player1.active = rPlayer1.active;
+                console.log('p1Active = ' + player1.active);
+            })
+            .updateScore1(player1); 
+    }
+    
+    /// Update score in db and js for player 2
+    function updateScore2(player2){
+        google.script.run // Run function from gs file
+            .withSuccessHandler(function(rPlayer2){ 
+                player2.score = rPlayer2.score;
+                console.log('Score2 updated to: ' + player2.score);
+                player2.active = rPlayer2.active;
+                console.log('p2Active = ' + player2.active);
+            })
+            .updateScore2(player2);
+    }
+    
+    </script>
