@@ -64,3 +64,4 @@ function updateScore2(player2){
   return player2;
 }
 
+// Update target score
