@@ -20,7 +20,7 @@ var target = ws.getRange(2,3);
 var p1Active = ws.getRange(2,4);
 var p2Active = ws.getRange(2,5);
 
-// Initial setup for player IDs in different browsers
+/// Initial setup for player IDs in different browsers
 function initialSetup(dbstat){
   dbstat.p1IsActive = p1Active.getValue();
   dbstat.p2IsActive = p2Active.getValue();
@@ -35,7 +35,7 @@ function initialSetup(dbstat){
   return dbstat;
 }
 
-// Update score1 in db and return result
+/// Set score1 in db and return result
 function updateScore1(player1){
   var isP1Active = p1Active.getValue();
   if (isP1Active == 0) {
@@ -43,13 +43,13 @@ function updateScore1(player1){
     player1.active = 1;
   }
   var currentScore = score1.getValue();
-  var pScore1 = currentScore + 1;
+  var pScore1 = currentScore + 1; // change to accept a passed value
   score1.setValue(pScore1);
   player1.score = pScore1;
   return player1;
 }
 
-// Update score2 in db and return result
+/// Set score2 in db and return result
 function updateScore2(player2){
   var isP2Active = p2Active.getValue();
   if (isP2Active == 0) {
@@ -57,11 +57,37 @@ function updateScore2(player2){
     player2.active = 1;
   }
   var currentScore = score2.getValue();
-  var pScore2 = currentScore + 1;
+  var pScore2 = currentScore + 1; // change to accept a passed value 
   score2.setValue(pScore2);
   player2.score = pScore2;
   Logger.log(pScore2);
   return player2;
 }
 
-// Update target score
+/// Set target score and return result
+function setTarget(value){
+  target.setValue(value);
+  return target.getValue();
+}
+/// Get target score
+function getTarget(){
+  return target.getValue(); 
+}
+/// Get score for player1
+function getPlayer1Score(player1) {
+  return score1.getValue();
+}
+/// Get score for player2
+function getPlayer2Score(player2) {
+  return score2.getValue();
+}
+
+
+/// Reset DB
+function resetDB(){
+  score1.setValue(0);
+  score2.setValue(0);
+  target.setValue(21);
+  p1Active.setValue(0);
+  p2Active.setValue(0);
+}

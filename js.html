@@ -1,6 +1,6 @@
 <script>
 
-  var target = 0; // add onchange listener
+  var target = 21;
   var isP1 = true;
   var isP2 = false;
   
@@ -18,6 +18,8 @@
     p2IsActive: 0
   }
   
+  //handle winning
+  
   //window.addEventListener('load', (event) => {
   //  console.log('page is fully loaded');
   //});
@@ -27,24 +29,21 @@
   function setupHandler(rdbstat){
       console.log("Initialize me, big boii.");
       if (rdbstat.p2IsActive == 1) {
-        console.log("p2IsActive returned 1");
         isP2 = true;
         isP1 = false;
       } 
       else { console.log("isP1"); }
       console.log('Initialization complete.');
-      console.log(rdbstat.p2IsActive);
       console.log("P1?: " + isP1 + ", P2?:" + isP2);
     }
-    
   
   /// Score button listener
   document.getElementById("submit").addEventListener("click",function(){
     // Read db for p#active values in gs and return result for eval
     if (isP1 == true) {
-      updateScore1();
+      updateScore1(player1);
     } else if (isP2 == true) {
-      updateScore2();
+      updateScore2(player2);
     } else {
       console.log("error")
     }
@@ -58,32 +57,68 @@
               console.log('Score1 updated to: ' + player1.score);
               player1.active = rPlayer1.active;
               console.log('p1Active = ' + player1.active);
-              
-              // update UI
+              document.getElementById("p1Display").innerHTML = player1.score;
           })
           .updateScore1(player1); 
   }
   
   /// Listener to update score in db and js for player 2, and update UI
   function updateScore2(player2){
-      google.script.run // Run function from gs file
+      google.script.run
           .withSuccessHandler(function(rPlayer2){ 
               player2.score = rPlayer2.score;
               console.log('Score2 updated to: ' + player2.score);
               player2.active = rPlayer2.active;
               console.log('p2Active = ' + player2.active);
-              
-              // update UI
+              document.getElementById("p2Display").innerHTML = player2.score;
           })
           .updateScore2(player2);
   }
   
   /// OnChange listener to send target score to db, and update local vars/UI
+  document.getElementById("target").addEventListener("change",function(e){
+    let inputScore = e.target.value
+    google.script.run
+      .withSuccessHandler(function(updatedScore){
+        //set display for target with new score
+        console.log(inputScore);
+      })
+      .setTarget(inputScore);
+  })
   
   /// update tick /// still need to test timings
-    // update js target score
-    // update js score for opposing player
+  //turn into one request instead of two
+  window.setInterval(function(){
+    console.log("tick");
+      // update js & ui target score
+      google.script.run.withSuccessHandler(function(rtarget){
+        console.log("target = " + rtarget);
+        target = rtarget
+        document.getElementById("target").innerHTML = target;
+      }).getTarget();
+      // update js score & ui with the opponent score
+      if (isP1 == true) {
+        console.log("pid = " + pid);
+        google.script.run.withSuccessHandler(function(score2){
+          player2.Score = score2
+          document.getElementById("p2Display").innerHTML = score2;
+        }).getPlayer2Score();
+      } else if (isP2 == true) {
+        console.log("pid = " + pid);
+        google.script.run.withSuccessHandler(function(score1){
+          player1.Score = score1
+          document.getElementById("p1Display").innerHTML = score1;
+        }).getPlayer1Score();
+      } 
+  }, 2000)
     
   /// Reset db on unload of either page
+  window.addEventListener('beforeunload', function (e) {
+    // the absence of a returnValue property on the event will guarantee the browser unload happens
+    google.script.run.resetDB();
+    delete e['returnValue'];
+  });
+  
+  //Tell the player which player they are //replace later with username from gscript
   
   </script>
