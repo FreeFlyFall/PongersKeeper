@@ -98,13 +98,11 @@
       }).getTarget();
       // update js score & ui with the opponent score
       if (isP1 == true) {
-        console.log("pid = " + pid);
         google.script.run.withSuccessHandler(function(score2){
           player2.Score = score2
           document.getElementById("p2Display").innerHTML = score2;
         }).getPlayer2Score();
       } else if (isP2 == true) {
-        console.log("pid = " + pid);
         google.script.run.withSuccessHandler(function(score1){
           player1.Score = score1
           document.getElementById("p1Display").innerHTML = score1;
