@@ -1,10 +1,12 @@
 // Reset button
 // Revert score if changed to invalid value
 
+
 var p1Display = document.getElementById('p1Display');
 var p2Display = document.getElementById('p2Display');
 var gtarget = document.getElementById('target');
 var feedback = document.getElementById('feedback');
+var prevScore = 21;
 
 function getp1score() {
 	return parseInt(p1Display.textContent);
@@ -26,12 +28,8 @@ socket.on('broadcast',function(data) {
 
 // Increment your score by 1 if the score isn't at the target score
 document.getElementById("submit").onclick = function() {
-	let p1score = getp1score();
-	let p2score = getp2score();
 	let target = gtarget.value;
-	if (p1score < target && p2score < target){
-		socket.emit('score', socket.id);
-	}
+	socket.emit('score', {socketID: socket.id, target: target});
 }
 // Server return with updated scores to both players
 socket.on('updateScores', function(data){
@@ -49,13 +47,15 @@ socket.on('updateScores', function(data){
 gtarget.onchange = function() {
 	let target = this.value;
 	if (target < 1){
-		feedback.textContent = "Target score must be greater than 0"
-		clearFeedbackElement()
-	} else if (target < getp1score() || target < getp2score()) {
-		feedback.textContent = "Target score must be higher than both current scores"
-		clearFeedbackElement()
+		feedback.textContent = "Target score must be greater than 0";
+		this.value = prevScore;
+		clearFeedbackElement();
+	} else if (target <= getp1score() || target <= getp2score()) {
+		feedback.textContent = "Target score must be higher than both current scores";
+		this.value = prevScore;
+		clearFeedbackElement();
 	} else {
-		socket.emit('target', target);
+		socket.emit('target', {target: target, socketID: socket.id});
 	}
 }
 // Server returns value to both players
@@ -65,6 +65,7 @@ socket.on('updateTarget', function(target) {
 		p2Display.classList.remove("winner");
 	}
 	gtarget.value = target;
+	prevScore = target;
 });
 
 // Custom disconnect method to send back socket.id

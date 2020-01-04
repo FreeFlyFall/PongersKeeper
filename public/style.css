@@ -1,3 +1,15 @@
+/* Remove inc/dec buttons on inputs */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
 .container {
     margin-top: 50px !important;
     margin: auto;
@@ -15,7 +27,8 @@ table, td {
 }
 
 input, select, textarea{
-    width: 160px !important;
+    width: 50px !important;
+	text-align: center;
 }
 
 .wrapper {
@@ -32,9 +45,10 @@ input, select, textarea{
 .wrapper2 {
     display: grid;
     grid-gap: 3px;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-rows: minmax(20px, auto);
     font-size: 15pt;
+	justify-items: center;
 }
 
 .small-text {
@@ -42,7 +56,6 @@ input, select, textarea{
     float: left;
     margin-top: 10px;
     margin-left: 6%;
-
 }
 
 @media only screen and (max-width: 1300px) {
@@ -80,7 +93,7 @@ input, select, textarea{
 }
 
 .selector {
-    margin-top: 1px !important;
+    margin-top: 10px !important;
     margin-right: 3px !important;
     margin-bottom: 3px !important;
     margin-left: 3px !important;

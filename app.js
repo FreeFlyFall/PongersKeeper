@@ -20,7 +20,6 @@ var player1 = new Player('player1'), player2 = new Player('player2');
 
 io.on('connection', function(socket) {
 	updateScores();
-	console.log(player1.id, player2.id);
 	if (player1.id != null && player2.id != null){
 		socket.emit('alert', { msg: 'The server is full.'});
 	} else {		
@@ -35,16 +34,17 @@ io.on('connection', function(socket) {
 			reset();
 		};
 	}
+	console.log(player1.id, player2.id);
 	
 	socket.on('disconnection', function(socketID){ // The default 'disconnect' method doesn't seem to hold the socket.id
-		if (player1.id == socketID) { 
+		if (player1.id == socketID) {
 			player1.id = null;
+			console.log(player1.id, player2.id);
 		} else if (player2.id == socketID) {
 			player2.id = null;
-		} else {
-			console.log('Unexpected socketID on disconnect. Resetting.')
 			console.log(player1.id, player2.id);
-			reset();
+		} else {
+			console.log('Unexpected socketID on disconnect.');
 		}
 	});
 	socket.on('disconnect', function(socket){ // Check socketIDs here because the default 'disconnect' method doesn't contain the ID after the disconnect
@@ -54,21 +54,24 @@ io.on('connection', function(socket) {
 		}  
   	});
 	
-	socket.on('score', function(socketID){
-		if (player1.id == socketID){
+	socket.on('score', function(data){
+		if (player1.id == data.socketID && player1.score < data.target && player2.score < data.target){
 			player1.score += 1;
-		} else if (player2.id == socketID){
+		} else if (player2.id == data.socketID && player2.score < data.target && player1.score < data.target){
 			player2.score += 1;
 		}
+		//console.log(player1.id, player2.id);
 		updateScores();
 	});
 	
-	socket.on('target', function(target){
-		io.sockets.emit('updateTarget', target)
-	})
+	socket.on('target', function(data){
+		if (player1.id == data.socketID || player2.id == data.socketID){
+			io.sockets.emit('updateTarget', data.target)
+		}
+	});
 });
 
-server.listen(3008, function() {
+server.listen(3009, function() {
 	console.log('Server open');
 });
 
