@@ -21,7 +21,7 @@ var player1 = new Player('player1'), player2 = new Player('player2');
 io.on('connection', function(socket) {
 	updateScores();
 	if (player1.id != null && player2.id != null){
-		socket.emit('alert', { msg: 'The server is full.'});
+		socket.emit('alert', 'The server is full, you are observing');
 	} else {		
 		if (player1.id == null) {
 			player1.id = socket.id;
@@ -59,6 +59,9 @@ io.on('connection', function(socket) {
 			player1.score += 1;
 		} else if (player2.id == data.socketID && player2.score < data.target && player1.score < data.target){
 			player2.score += 1;
+		} else {
+			io.emit('alert', 'You are observing')
+			return
 		}
 		//console.log(player1.id, player2.id);
 		updateScores();
@@ -70,11 +73,15 @@ io.on('connection', function(socket) {
 		}
 	});
 	
-	socket.on('reset', function(){
-		player1.score = 0;
-		player2.score = 0;
-		updateScores();
-		io.sockets.emit('updateTarget', 21);
+	socket.on('reset', function(id){
+		if (player1.id == id || player2.id == id){
+			player1.score = 0;
+			player2.score = 0;
+			updateScores();
+			io.sockets.emit('updateTarget', 21);
+		} else {
+			io.emit('alert', 'only players may reset');
+		}
 	});
 });
 

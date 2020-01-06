@@ -5,6 +5,7 @@
 	// so that watchers can jump in/ players can leave
 
 // store target on server side so tab restores init it with proper value
+// fix action buttom moving on feedback display update
 
 var p1Display = document.getElementById('p1Display');
 var p2Display = document.getElementById('p2Display');
@@ -22,7 +23,7 @@ function getp2score() {
 
 var socket = io.connect();
 socket.on('alert', function (data) {
-    alert(data.msg);
+    feed(data);
 });
 socket.on('log', function (data) {
     console.log(data.msg);
@@ -52,13 +53,11 @@ socket.on('updateScores', function(data){
 gtarget.onchange = function() {
 	let target = this.value;
 	if (target < 1){
-		feedback.textContent = "Target score must be greater than 0";
+		feed("Target score must be greater than 0");
 		this.value = prevScore;
-		clearFeedbackElement();
 	} else if (target <= getp1score() || target <= getp2score()) {
-		feedback.textContent = "Target score must be higher than both current scores";
+		feed("Target score must be higher than both current scores");
 		this.value = prevScore;
-		clearFeedbackElement();
 	} else {
 		socket.emit('target', {target: target, socketID: socket.id});
 	}
@@ -81,18 +80,18 @@ window.addEventListener('beforeunload', function (e) {
 
 // Show winner
 function displayWin(num){
-	feedback.textContent = `Player${num} wins`;
+	feed(`Player${num} wins`);
 	document.getElementById(`p${num}Display`).classList.add("winner");
-	clearFeedbackElement();
 }
 
 // Reset
 document.getElementById("reset").onclick = function() {
-	socket.emit('reset');
+	socket.emit('reset', socket.id);
 }
 
-// Clear feedback display after 4 seconds. Needs throttling/debouncing
-function clearFeedbackElement(){
+// Update feedback element and clear it after 4 seconds. Needs throttling/debouncing
+function feed(string=''){
+  feedback.textContent = string;
   setTimeout(function(){
     feedback.textContent = "";
   }, 4000)

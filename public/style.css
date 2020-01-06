@@ -95,6 +95,7 @@ input, select, textarea{
 .actions {
 	grid-column: 1 / 4 !important;
 	grid-row: 3;
+	/* position: absolute !important; */
 }
 
 .wrapper > div {
