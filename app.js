@@ -78,7 +78,7 @@ io.on('connection', function(socket) {
 	});
 });
 
-server.listen(3009, function() {
+server.listen(process.env.PORT || 3009, process.env.IP, function() {
 	console.log('Server open');
 });
 
