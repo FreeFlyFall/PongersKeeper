@@ -12,8 +12,8 @@ input[type=number] {
 
 .container {
     margin-top: 50px !important;
-    margin: auto;
-    min-width: 300px;
+    margin: auto !important;
+    min-width: 300px !important;
     max-width: 25%;
     text-align: center;
 }
@@ -32,12 +32,10 @@ input, select, textarea{
 }
 
 .wrapper {
+	margin-top: 30px;
     display: grid;
     grid-gap: 5px;
     grid-template-columns: 50% 50%;
-    /* Changed after https://www.chromestatus.com/feature/6708326821789696 */
-    /* Changes the behavior of percentage row tracks and gutters in grid containers with indefinite heights */
-    /* grid-template-rows: 10% 10%; */
     grid-template-rows: 1fr 1fr;
     font-size: 16pt;
 }
@@ -49,6 +47,16 @@ input, select, textarea{
     grid-template-rows: minmax(20px, auto);
     font-size: 15pt;
 	justify-items: center;
+}
+
+.wrapper3 {
+	/* margin-left: 55%;  */
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: minmax(20px, auto);
+    font-size: 15pt;
+	justify-items: end;
 }
 
 .small-text {
@@ -84,6 +92,11 @@ input, select, textarea{
     grid-row: 2;
 }
 
+.actions {
+	grid-column: 1 / 4 !important;
+	grid-row: 3;
+}
+
 .wrapper > div {
     background: #eee;
 }
@@ -98,4 +111,9 @@ input, select, textarea{
     margin-bottom: 3px !important;
     margin-left: 3px !important;
     float: left;
+}
+
+.dropdown-menu{
+	max-width: 100px !important;
+	min-width: 100px !important;
 }

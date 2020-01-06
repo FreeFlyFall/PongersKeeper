@@ -69,6 +69,13 @@ io.on('connection', function(socket) {
 			io.sockets.emit('updateTarget', data.target)
 		}
 	});
+	
+	socket.on('reset', function(){
+		player1.score = 0;
+		player2.score = 0;
+		updateScores();
+		io.sockets.emit('updateTarget', 21);
+	});
 });
 
 server.listen(3009, function() {
@@ -78,11 +85,6 @@ server.listen(3009, function() {
 // Methods
 function updateScores() {
 	io.sockets.emit('updateScores', {p1score: player1.score, p2score: player2.score})
-}
-
-function reset() {
-	player1 = new Player();
-	player2 = new Player();
 }
 
 function doclog(socket, msg) {

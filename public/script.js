@@ -1,12 +1,17 @@
-// Reset button
-// Revert score if changed to invalid value
+// Display data to subsequent sockets
+// Add dropup to show settings which hold:
+	// Reset button for active players
+	// play button for watchers/watch button for players
+	// so that watchers can jump in/ players can leave
 
+// store target on server side so tab restores init it with proper value
 
 var p1Display = document.getElementById('p1Display');
 var p2Display = document.getElementById('p2Display');
 var gtarget = document.getElementById('target');
 var feedback = document.getElementById('feedback');
 var prevScore = 21;
+var reset = document.getElementById('reset');
 
 function getp1score() {
 	return parseInt(p1Display.textContent);
@@ -79,6 +84,11 @@ function displayWin(num){
 	feedback.textContent = `Player${num} wins`;
 	document.getElementById(`p${num}Display`).classList.add("winner");
 	clearFeedbackElement();
+}
+
+// Reset
+document.getElementById("reset").onclick = function() {
+	socket.emit('reset');
 }
 
 // Clear feedback display after 4 seconds. Needs throttling/debouncing

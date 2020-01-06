@@ -2,38 +2,61 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>ScoreBoard</title>
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="/socket.io/socket.io.js"></script>
+	<meta charset="UTF-8">
+	<title>ScoreBoard</title>
 
-    <body>
-        <div class="container">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-            <div class="wrapper">
-                <div>Player 1:</div>
-                <div>
-                    <span id="p1Display">0</span>
-                </div>
-                <div>Player 2:</div>
-                <div>
-                    <span id="p2Display">0</span>
-                </div>
-            </div>
+	<!-- JS, PopperJS, Jquery -->
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-            <div class="wrapper2">
-                <div class="selector box1">
-                    <input type="number" name="target" id="target" value="21" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                </div>
-                <div class="selector box2">
-                    <button type="submit" id="submit" class="btn btn-secondary">Score</button>
-                </div>
-            </div>
-        </div>
-        <div class="container" id="feedback"></div>
+	<!-- Custom Stylesheet -->
+	<link rel="stylesheet" type="text/css" href="style.css">
 
-        <script type="application/javascript" src="script.js"></script>
-    </body>
+	<!-- Websockets library -->
+	<script src="/socket.io/socket.io.js"></script>
+
+	<body>
+		<div class="container">
+
+			<div class="wrapper">
+				<div>Player 1:</div>
+				<div>
+					<span id="p1Display">0</span>
+				</div>
+				<div>Player 2:</div>
+				<div>
+					<span id="p2Display">0</span>
+				</div>
+			</div>
+
+			<div class="wrapper2">
+				<div class="selector box1">
+					<input type="number" name="target" id="target" value="21" maxlength="3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+				</div>
+				<div class="selector box2">
+					<button type="submit" id="submit" class="btn btn-secondary">Score</button>
+				</div>
+			</div>
+		</div>
+		<div class="container" id="feedback"></div>
+
+		<div class="wrapper3">
+			<div class="dropup actions">
+				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Actions
+				</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" id="reset" href="#">Reset</a>
+					<a class="dropdown-item" href="#">Switch</a>
+				</div>
+			</div>
+		</div>
+
+		<script type="application/javascript" src="script.js"></script>
+	</body>
 
 </html>
