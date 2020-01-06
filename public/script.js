@@ -1,6 +1,3 @@
-// Display data to subsequent sockets
-// Add dropup to show settings which hold:
-	// Reset button for active players
 	// play button for watchers/watch button for players
 	// so that watchers can jump in/ players can leave
 
@@ -11,7 +8,6 @@ var p1Display = document.getElementById('p1Display');
 var p2Display = document.getElementById('p2Display');
 var gtarget = document.getElementById('target');
 var feedback = document.getElementById('feedback');
-var prevScore = 21;
 var reset = document.getElementById('reset');
 
 function getp1score() {
@@ -51,16 +47,7 @@ socket.on('updateScores', function(data){
 
 // Update target score
 gtarget.onchange = function() {
-	let target = this.value;
-	if (target < 1){
-		feed("Target score must be greater than 0");
-		this.value = prevScore;
-	} else if (target <= getp1score() || target <= getp2score()) {
-		feed("Target score must be higher than both current scores");
-		this.value = prevScore;
-	} else {
-		socket.emit('target', {target: target, socketID: socket.id});
-	}
+	socket.emit('target', {target: this.value, socketID: socket.id});
 }
 // Server returns value to both players
 socket.on('updateTarget', function(target) {
@@ -69,7 +56,6 @@ socket.on('updateTarget', function(target) {
 		p2Display.classList.remove("winner");
 	}
 	gtarget.value = target;
-	prevScore = target;
 });
 
 // Custom disconnect method to send back socket.id

@@ -17,6 +17,7 @@ class Player {
 	}
 }
 var player1 = new Player('player1'), player2 = new Player('player2');
+var target = 21;
 
 io.on('connection', function(socket) {
 	updateScores();
@@ -43,8 +44,6 @@ io.on('connection', function(socket) {
 		} else if (player2.id == socketID) {
 			player2.id = null;
 			console.log(player1.id, player2.id);
-		} else {
-			console.log('Unexpected socketID on disconnect.');
 		}
 	});
 	socket.on('disconnect', function(socket){ // Check socketIDs here because the default 'disconnect' method doesn't contain the ID after the disconnect
@@ -60,16 +59,28 @@ io.on('connection', function(socket) {
 		} else if (player2.id == data.socketID && player2.score < data.target && player1.score < data.target){
 			player2.score += 1;
 		} else {
-			io.emit('alert', 'You are observing')
-			return
+			socket.emit('alert', 'You are observing');
+			return;
 		}
 		//console.log(player1.id, player2.id);
 		updateScores();
 	});
 	
 	socket.on('target', function(data){
-		if (player1.id == data.socketID || player2.id == data.socketID){
-			io.sockets.emit('updateTarget', data.target)
+		if (player1.id !== data.socketID && player2.id !== data.socketID){
+			socket.emit('alert', 'Only players can update the target score');
+			socket.emit('updateTarget', target);
+			return;
+		} else if (data.target < 1){
+			socket.emit('alert',"Target score must be greater than 0");
+			socket.emit('updateTarget', target);
+			return;
+		} else if (data.target <= player1.score || data.target <= player2.score) {
+			socket.emit('alert',"Target score must be higher than both current scores");
+			socket.emit('updateTarget', target);
+			return;
+		} else {
+			io.emit('updateTarget', data.target)
 		}
 	});
 	
@@ -78,20 +89,20 @@ io.on('connection', function(socket) {
 			player1.score = 0;
 			player2.score = 0;
 			updateScores();
-			io.sockets.emit('updateTarget', 21);
+			io.emit('updateTarget', 21);
 		} else {
-			io.emit('alert', 'only players may reset');
+			socket.emit('alert', 'only players may reset');
 		}
 	});
 });
 
-server.listen(process.env.PORT || 3009, process.env.IP, function() {
+server.listen(process.env.PORT || 3010, process.env.IP, function() {
 	console.log('Server open');
 });
 
 // Methods
 function updateScores() {
-	io.sockets.emit('updateScores', {p1score: player1.score, p2score: player2.score})
+	io.emit('updateScores', {p1score: player1.score, p2score: player2.score})
 }
 
 function doclog(socket, msg) {
