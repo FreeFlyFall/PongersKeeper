@@ -2,6 +2,8 @@
 // so that watchers can jump in/ players can leave
 
 // Add server reset to separate dropup
+// send current state on connection & update ui
+// Fix switch in/out before working on gettings names to work
 
 var p1Display = document.getElementById('p1Display');
 var p2Display = document.getElementById('p2Display');
@@ -31,7 +33,7 @@ socket.on('broadcast',function(data) {
 
 // Get & display user names
 socket.on('connector', function(data){
-	result = prompt('Enter username: ');	
+	var result = prompt('Enter username: ');
 	if (data.player == 1) {
 		if (result == '') {
 			result = 'Player 1: '
@@ -82,21 +84,40 @@ socket.on('updateTarget', function(target) {
 	gtarget.value = target;
 });
 
+// // Switch in/out
+// document.getElementById('tag').onclick = function() {
+// 	socket.emit('tag', socket.id);
+// }
+// socket.on('tagout', function(playerNum){
+// 	if (playerNum == 1){
+// 		p1Active.textContent = "Player 1: ";
+// 	} else if (playerNum == 2){
+// 		p2Active.textContent = "Player 2: ";
+// 	}
+// });
+// socket.on('tagin', function(id){
+// 	let result = prompt('Enter username: ');
+// 	socket.emit('tagin', {id: socket.id, name: result});
+// });
+
+// Reset
+document.getElementById("reset").onclick = function() {
+	socket.emit('reset', socket.id);
+}
+
 // Custom disconnect method to send back socket.id
 window.addEventListener('beforeunload', function (e) {
     socket.emit('disconnection', socket.id);
     delete e['returnValue'];
 });
 
+
+
+
 // Show winner
 function displayWin(num){
 	feed(`Player${num} wins`);
 	document.getElementById(`p${num}Display`).classList.add("winner");
-}
-
-// Reset
-document.getElementById("reset").onclick = function() {
-	socket.emit('reset', socket.id);
 }
 
 // Update feedback element and clear it after 4 seconds. Needs throttling/debouncing

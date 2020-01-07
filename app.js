@@ -34,10 +34,10 @@ io.on('connection', function(socket) {
 			socket.emit('connector', {player: 2})
 		} else {
 			doclog(socket, 'Unexpected session error. Resetting. Refresh the page.');
-			reset();
+			//reset();
 		};
 	}
-	console.log(player1.id, player2.id);
+	console.log('con', player1.id, player2.id);
 
 	socket.on('setUser', function(data){
 		if (data.player == 1) {
@@ -45,16 +45,17 @@ io.on('connection', function(socket) {
 		} else if (data.player == 2) {
 			player2.name = data.name;
 		}
+		console.log('names', player1.name, player2.name);
 		io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
 	});
 	
 	socket.on('disconnection', function(socketID){ // The default 'disconnect' method doesn't seem to hold the socket.id
 		if (player1.id == socketID) {
 			player1.id = null;
-			console.log(player1.id, player2.id);
+			console.log('dis', player1.id, player2.id);
 		} else if (player2.id == socketID) {
 			player2.id = null;
-			console.log(player1.id, player2.id);
+			console.log('dis', player1.id, player2.id);
 		}
 	});
 	socket.on('disconnect', function(socket){ // Check socketIDs here because the default 'disconnect' method doesn't contain the ID after the disconnect
@@ -98,11 +99,41 @@ io.on('connection', function(socket) {
 		if (player1.id == id || player2.id == id){
 			player1.score = 0;
 			player2.score = 0;
+			//player1.name = 'Player 1: ';
+			//player2.name = 'Player 2: ';
 			updateScores();
 			io.emit('updateTarget', 21);
+			//io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
 		} else {
 			socket.emit('alert', 'only players may reset');
 		}
+	});
+	
+	socket.on('tag', function(id){
+		if (player1.id == id) {
+			player1.id = null;
+			io.emit('tagout', 1);
+		}
+		else if (player2.id == id) {
+			player2.id = null; 
+			io.emit('tagout', 2);
+		}
+		if (player1.id == null) {
+			player1.id = id;
+			socket.emit('tagin', id);				
+		}
+		else if (player2.if == null) {
+			player2.id = id;
+			socket.emit('tagin', id);
+		}
+	});
+	socket.on('tagin', function(data){
+		if (player1.id == data.id){
+			player1.name = data.name;
+		} else if (player2.id == data.id){
+			player2.name = data.name;
+		}
+		io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
 	});
 });
 
