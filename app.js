@@ -16,7 +16,7 @@ class Player {
 		this.score = 0;
 	}
 }
-var player1 = new Player('player1'), player2 = new Player('player2');
+var player1 = new Player('Player 1: '), player2 = new Player('Player 2: ');
 var target = 21;
 
 io.on('connection', function(socket) {
@@ -27,15 +27,26 @@ io.on('connection', function(socket) {
 		if (player1.id == null) {
 			player1.id = socket.id;
 			broadcast(socket, 'Player1 connected');
+			socket.emit('connector', {player: 1})
 		} else if (player2.id == null) {
 			player2.id = socket.id;
-			broadcast(socket, `Player2 connected`);
+			broadcast(socket, 'Player2 connected');
+			socket.emit('connector', {player: 2})
 		} else {
 			doclog(socket, 'Unexpected session error. Resetting. Refresh the page.');
 			reset();
 		};
 	}
 	console.log(player1.id, player2.id);
+
+	socket.on('setUser', function(data){
+		if (data.player == 1) {
+			player1.name = data.name;
+		} else if (data.player == 2) {
+			player2.name = data.name;
+		}
+		io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
+	});
 	
 	socket.on('disconnection', function(socketID){ // The default 'disconnect' method doesn't seem to hold the socket.id
 		if (player1.id == socketID) {
@@ -62,7 +73,6 @@ io.on('connection', function(socket) {
 			socket.emit('alert', 'You are observing');
 			return;
 		}
-		//console.log(player1.id, player2.id);
 		updateScores();
 	});
 	

@@ -11,7 +11,6 @@ input[type=number] {
 }
 
 .container {
-    margin-top: 50px !important;
     margin: auto !important;
     min-width: 300px !important;
     max-width: 25%;
@@ -20,6 +19,12 @@ input[type=number] {
 
 .winner {
     color: rgb(58, 187, 69);
+	font-weight: bold;
+}
+
+.activePlayer {
+	color: rgb(65, 150, 220);
+	font-weight: bold;
 }
 
 table, td {
@@ -95,7 +100,6 @@ input, select, textarea{
 .actions {
 	grid-column: 1 / 4 !important;
 	grid-row: 3;
-	/* position: absolute !important; */
 }
 
 .wrapper > div {
@@ -117,4 +121,8 @@ input, select, textarea{
 .dropdown-menu{
 	max-width: 100px !important;
 	min-width: 100px !important;
+}
+
+#feedback {
+	margin-top: 25px !important;
 }

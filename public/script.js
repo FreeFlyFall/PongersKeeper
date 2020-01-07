@@ -1,11 +1,12 @@
-	// play button for watchers/watch button for players
-	// so that watchers can jump in/ players can leave
+// play button for watchers/watch button for players
+// so that watchers can jump in/ players can leave
 
-// store target on server side so tab restores init it with proper value
-// fix action buttom moving on feedback display update
+// Add server reset to separate dropup
 
 var p1Display = document.getElementById('p1Display');
 var p2Display = document.getElementById('p2Display');
+var p1Active = document.getElementById('p1Active');
+var p2Active = document.getElementById('p2Active');
 var gtarget = document.getElementById('target');
 var feedback = document.getElementById('feedback');
 var reset = document.getElementById('reset');
@@ -27,6 +28,29 @@ socket.on('log', function (data) {
 socket.on('broadcast',function(data) {
   console.log(data.description);
 });
+
+// Get & display user names
+socket.on('connector', function(data){
+	result = prompt('Enter username: ');	
+	if (data.player == 1) {
+		if (result == '') {
+			result = 'Player 1: '
+		}
+		p1Active.classList.add('activePlayer');
+		socket.emit('setUser', {player: 1, name: result})
+	}
+	else if (data.player == 2) {
+		if (result == '') {
+			result = 'Player 2: '
+		}
+		p2Active.classList.add('activePlayer');
+		socket.emit('setUser', {player: 2, name: result})
+	}
+});
+socket.on('returnUsers', function(data){
+	p1Active.textContent = data.player1Name;
+	p2Active.textContent = data.player2Name;
+})
 
 // Increment your score by 1 if the score isn't at the target score
 document.getElementById("submit").onclick = function() {
