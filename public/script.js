@@ -33,26 +33,26 @@ socket.on('broadcast',function(data) {
 
 // Get & display user names
 socket.on('connector', function(data){
-	var result = prompt('Enter username: ');
+	// var result = prompt('Enter username: ');
 	if (data.player == 1) {
-		if (result == '') {
-			result = 'Player 1: '
-		}
+	// 	if (result == '') {
+	// 		result = 'Player 1: '
+	// 	}
 		p1Active.classList.add('activePlayer');
-		socket.emit('setUser', {player: 1, name: result})
+		// socket.emit('setUser', {player: 1, name: result})
 	}
 	else if (data.player == 2) {
-		if (result == '') {
-			result = 'Player 2: '
-		}
+		// if (result == '') {
+		// 	result = 'Player 2: '
+		// }
 		p2Active.classList.add('activePlayer');
-		socket.emit('setUser', {player: 2, name: result})
+		// socket.emit('setUser', {player: 2, name: result})
 	}
 });
-socket.on('returnUsers', function(data){
-	p1Active.textContent = data.player1Name;
-	p2Active.textContent = data.player2Name;
-})
+// socket.on('returnUsers', function(data){
+// 	p1Active.textContent = data.player1Name;
+// 	p2Active.textContent = data.player2Name;
+// })
 
 // Increment your score by 1 if the score isn't at the target score
 document.getElementById("submit").onclick = function() {
@@ -84,21 +84,28 @@ socket.on('updateTarget', function(target) {
 	gtarget.value = target;
 });
 
-// // Switch in/out
-// document.getElementById('tag').onclick = function() {
-// 	socket.emit('tag', socket.id);
-// }
-// socket.on('tagout', function(playerNum){
-// 	if (playerNum == 1){
-// 		p1Active.textContent = "Player 1: ";
-// 	} else if (playerNum == 2){
-// 		p2Active.textContent = "Player 2: ";
-// 	}
-// });
-// socket.on('tagin', function(id){
-// 	let result = prompt('Enter username: ');
-// 	socket.emit('tagin', {id: socket.id, name: result});
-// });
+// Switch in/out
+document.getElementById('tag').onclick = function() {
+	socket.emit('tag', socket.id);
+}
+socket.on('tagout', function(playerNum){
+	if (playerNum == 1){
+		//p1Active.textContent = "Player 1: ";
+		p1Active.classList.remove("activePlayer");
+	} else if (playerNum == 2){
+		p2Active.classList.remove('activePlayer');
+		//p2Active.textContent = "Player 2: ";
+	}
+});
+socket.on('tagin', function(playerNum){
+	if(playerNum == 1){
+		p1Active.classList.add('activePlayer');
+	} else if (playerNum == 2){
+		p2Active.classList.add('activePlayer');
+	}
+	// let result = prompt('Enter username: ');
+	//socket.emit('tagin', {id: socket.id, name: result});
+});
 
 // Reset
 document.getElementById("reset").onclick = function() {

@@ -39,15 +39,15 @@ io.on('connection', function(socket) {
 	}
 	console.log('con', player1.id, player2.id);
 
-	socket.on('setUser', function(data){
-		if (data.player == 1) {
-			player1.name = data.name;
-		} else if (data.player == 2) {
-			player2.name = data.name;
-		}
-		console.log('names', player1.name, player2.name);
-		io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
-	});
+	// socket.on('setUser', function(data){
+	// 	if (data.player == 1) {
+	// 		player1.name = data.name;
+	// 	} else if (data.player == 2) {
+	// 		player2.name = data.name;
+	// 	}
+	// 	console.log('names', player1.name, player2.name);
+	// 	io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
+	// });
 	
 	socket.on('disconnection', function(socketID){ // The default 'disconnect' method doesn't seem to hold the socket.id
 		if (player1.id == socketID) {
@@ -110,34 +110,36 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('tag', function(id){
-		if (player1.id == id) {
+		if (player1.id == null) {
+			player1.id = id;
+			socket.emit('tagin', 1);				
+		}
+		else if (player2.id == null) {
+			player2.id = id;
+			socket.emit('tagin', 2);
+		} 
+		else if (player1.id == id) {
 			player1.id = null;
-			io.emit('tagout', 1);
+			socket.emit('tagout', 1);
 		}
 		else if (player2.id == id) {
 			player2.id = null; 
-			io.emit('tagout', 2);
-		}
-		if (player1.id == null) {
-			player1.id = id;
-			socket.emit('tagin', id);				
-		}
-		else if (player2.if == null) {
-			player2.id = id;
-			socket.emit('tagin', id);
+			socket.emit('tagout', 2);
+		} else {
+			socket.emit('alert', 'The server is full');
 		}
 	});
-	socket.on('tagin', function(data){
-		if (player1.id == data.id){
-			player1.name = data.name;
-		} else if (player2.id == data.id){
-			player2.name = data.name;
-		}
-		io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
-	});
+	// socket.on('tagin', function(data){
+	// 	if (player1.id == data.id){
+	// 		player1.name = data.name;
+	// 	} else if (player2.id == data.id){
+	// 		player2.name = data.name;
+	// 	}
+	// 	io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
+	// });
 });
 
-server.listen(process.env.PORT || 3010, process.env.IP, function() {
+server.listen(process.env.PORT || 3011, process.env.IP, function() {
 	console.log('Server open');
 });
 
