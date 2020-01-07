@@ -1,7 +1,3 @@
-// Add server reset
-// send names on connection
-// hide score and all actions unless initial player, or on switch
-
 var p1Display = document.getElementById('p1Display');
 var p2Display = document.getElementById('p2Display');
 var p1Active = document.getElementById('p1Active');

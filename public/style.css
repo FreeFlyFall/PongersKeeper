@@ -10,10 +10,21 @@ input[type=number] {
   -moz-appearance:textfield;
 }
 
+body {
+	min-width: 300px;
+}
+
 .container {
     margin: auto !important;
     min-width: 300px !important;
-    max-width: 25%;
+    max-width: 95%;
+    text-align: center;
+}
+
+.container2 {
+    margin: auto !important;
+    min-width: 300px !important;
+    max-width: 99%;
     text-align: center;
 }
 
@@ -37,7 +48,7 @@ input, select, textarea{
 }
 
 .wrapper {
-	margin-top: 30px;
+	margin-top: 10px;
     display: grid;
     grid-gap: 5px;
     grid-template-columns: 50% 50%;
@@ -55,13 +66,11 @@ input, select, textarea{
 }
 
 .wrapper3 {
-	/* margin-left: 55%;  */
     display: grid;
     grid-gap: 3px;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: minmax(20px, auto);
+    grid-template-columns: 1fr ;
     font-size: 15pt;
-	justify-items: end;
+	justify-items: center;
 }
 
 .small-text {
@@ -111,7 +120,7 @@ input, select, textarea{
 }
 
 .selector {
-    margin-top: 10px !important;
+    margin-top: 5px !important;
     margin-right: 3px !important;
     margin-bottom: 3px !important;
     margin-left: 3px !important;
@@ -124,5 +133,10 @@ input, select, textarea{
 }
 
 #feedback {
-	margin-top: 25px !important;
+	margin-top: 10px !important;
+}
+
+#submit {
+	width: 92vw;
+	height: 50vh;
 }
