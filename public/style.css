@@ -16,15 +16,15 @@ body {
 
 .container {
     margin: auto !important;
-    min-width: 300px !important;
-    max-width: 95%;
+    min-width: 350px !important;
+    max-width: 95%px;
     text-align: center;
 }
 
 .container2 {
     margin: auto !important;
     min-width: 300px !important;
-    max-width: 99%;
+    max-width: 100%;
     text-align: center;
 }
 
