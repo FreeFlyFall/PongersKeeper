@@ -1,3 +1,7 @@
+// Add server reset
+// send names on connection
+// hide score and all actions unless initial player, or on switch
+
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -28,16 +32,17 @@ io.on('connection', function(socket) {
 			player1.id = socket.id;
 			broadcast(socket, 'Player1 connected');
 			socket.emit('connector', {player: 1})
+			console.log('con', player1.id, player2.id);
 		} else if (player2.id == null) {
 			player2.id = socket.id;
 			broadcast(socket, 'Player2 connected');
 			socket.emit('connector', {player: 2})
+			console.log('con', player1.id, player2.id);
 		} else {
 			doclog(socket, 'Unexpected session error. Resetting. Refresh the page.');
 			//reset();
 		};
 	}
-	console.log('con', player1.id, player2.id);
 
 	// socket.on('setUser', function(data){
 	// 	if (data.player == 1) {
@@ -137,6 +142,11 @@ io.on('connection', function(socket) {
 	// 	}
 	// 	io.emit('returnUsers', {player1Name: player1.name, player2Name: player2.name});
 	// });
+	
+	socket.on('lunatic', function(){
+		player1 = new Player('Player 1: ');
+		player2 = new Player('Plyaer 2: ');
+	});
 });
 
 server.listen(process.env.PORT || 3011, process.env.IP, function() {

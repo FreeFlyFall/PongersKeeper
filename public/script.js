@@ -1,9 +1,6 @@
-// play button for watchers/watch button for players
-// so that watchers can jump in/ players can leave
-
-// Add server reset to separate dropup
-// send current state on connection & update ui
-// Fix switch in/out before working on gettings names to work
+// Add server reset
+// send names on connection
+// hide score and all actions unless initial player, or on switch
 
 var p1Display = document.getElementById('p1Display');
 var p2Display = document.getElementById('p2Display');
